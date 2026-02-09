@@ -31,7 +31,7 @@ let test_automate () : Types.automate =
 
 let main () : unit =
     let mon_automate = test_automate () in
-    print_automate mon_automate
-    (* Read_file.gnl_grammar () *)
+    print_automate mon_automate;
+    Read_file.gnl_grammar ()
 
 let () = main ()
