@@ -1,4 +1,5 @@
 module Types = Ft_ality.Types
+module Read_file = Ft_ality.Read_file
 
 let print_automate(automate: Types.automate) : unit =
     Printf.printf "\n === AUTOMATE === \n";
@@ -23,13 +24,14 @@ let test_automate () : Types.automate =
     etats_finaux = [2];
     transitions = 
     [
-    (0, "[BP]", 1);
-    (1, "[FP]", 2);
+        (0, "[BP]", 1);
+        (1, "[FP]", 2);
     ];
 }
 
 let main () : unit =
     let mon_automate = test_automate () in
     print_automate mon_automate
+    (* Read_file.gnl_grammar () *)
 
 let () = main ()

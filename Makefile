@@ -13,7 +13,7 @@ run: $(NAME)
 	dune exec $(NAME)
 
 clean:
-	rm -rf _build
+	$(DUNE) clean
 
 fclean: clean
 	rm -rf $(NAME)
