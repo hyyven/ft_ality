@@ -1,4 +1,6 @@
-let print_automate(automate: Ft_ality.Types.automate) : unit =
+module Types = Ft_ality.Types
+
+let print_automate(automate: Types.automate) : unit =
     Printf.printf "\n === AUTOMATE === \n";
     Printf.printf "etats : %d etats au total\n" (List.length automate.etats);
     let entrees = String.concat ", " automate.lexique in
@@ -13,8 +15,7 @@ let print_automate(automate: Ft_ality.Types.automate) : unit =
     
     Printf.printf "\n"
 
-
-let test_automate () : Ft_ality.Types.automate =
+let test_automate () : Types.automate =
 {
     etats = [0; 1; 2];
     lexique = ["[BP]"; "[FP]"];
