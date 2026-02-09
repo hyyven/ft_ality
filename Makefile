@@ -1,41 +1,21 @@
-# Makefile pour ft_ality_v2
-# Compilation OCaml
+NAME = ft_ality
+DUNE = dune		# ca c'est utile ptn
+SRCS = $(shell find . -name "*.mli" -o -name "*.ml" -o -name "dune") # to avoid relink / find every .ml, .mli, dune files
 
-# Compilateur
-OCAMLC = ocamlc
-OCAMLOPT = ocamlopt
+all: $(NAME)
 
-# Fichiers sources (dans l'ordre de dépendance)
-SOURCES = types.ml main.ml
+$(NAME): $(SRCS)
+	$(DUNE) build
+	@rm -f $(NAME)
+	@cp _build/install/default/bin/ft_ality $(NAME)
 
-# Fichiers objets
-OBJS = $(SOURCES:.ml=.cmo)
-OBJS_OPT = $(SOURCES:.ml=.cmx)
+run: $(NAME)
+	dune exec $(NAME)
 
-# Nom de l'exécutable
-EXEC = ft_ality
-
-# Règle par défaut: compilation en bytecode
-all: $(EXEC)
-
-# Compilation bytecode
-$(EXEC): $(OBJS)
-	$(OCAMLC) -o $(EXEC) $(OBJS)
-
-%.cmo: %.ml
-	$(OCAMLC) -c $<
-
-# Compilation native (optimisée)
-opt: $(EXEC).opt
-
-$(EXEC).opt: $(OBJS_OPT)
-	$(OCAMLOPT) -o $(EXEC) $(OBJS_OPT)
-
-%.cmx: %.ml
-	$(OCAMLOPT) -c $<
-
-# Nettoyage
 clean:
-	rm -f *.cmi *.cmo *.cmx *.o $(EXEC) $(EXEC).opt
+	rm -rf _build
 
-.PHONY: all opt clean
+fclean: clean
+	rm -rf $(NAME)
+
+re: fclean all
