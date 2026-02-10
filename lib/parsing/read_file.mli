@@ -1,3 +1,8 @@
-val gnl_grammar : unit -> unit
+type mode =
+    | NoMode
+    | Keys
+    | Moves
 
-val parse_line : string -> unit
+val gnl_grammar : Types.automate -> Types.automate
+
+val parse_line : mode -> string -> Types.automate -> mode * Types.automate

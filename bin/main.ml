@@ -4,7 +4,11 @@ module Read_file = Ft_ality.Read_file
 let print_automate(automate: Types.automate) : unit =
     Printf.printf "\n === AUTOMATE === \n";
     Printf.printf "etats : %d etats au total\n" (List.length automate.etats);
-    let entrees = String.concat ", " automate.lexique in
+    let entrees =
+        automate.lexique
+        |> List.map (fun (key, value) -> key ^ "->" ^ value)
+        |> String.concat ", "
+    in
     Printf.printf "inputs : %s\n" entrees;
     Printf.printf "etat de depart : %d\n" automate.etat_initial;
     let etats_fin = String.concat ", " 
@@ -19,7 +23,7 @@ let print_automate(automate: Types.automate) : unit =
 let test_automate () : Types.automate =
 {
     etats = [0; 1; 2];
-    lexique = ["[BP]"; "[FP]"];
+    lexique = [];
     etat_initial = 0; 
     etats_finaux = [2];
     transitions = 
@@ -32,6 +36,7 @@ let test_automate () : Types.automate =
 let main () : unit =
     let mon_automate = test_automate () in
     print_automate mon_automate;
-    Read_file.gnl_grammar ()
+    let mon_automate = Read_file.gnl_grammar mon_automate in
+    print_automate mon_automate
 
 let () = main ()

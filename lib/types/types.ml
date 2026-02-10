@@ -1,17 +1,21 @@
-type input = string
 type etat = int
+
+type input = string
+
 type transition = etat * input * etat
+
+type key_dict = (input * string)
 
 type automate = 
 {
     etats : etat list;
-    lexique : input list ;
+    lexique : key_dict list ;
     etat_initial : etat;
     etats_finaux : etat list;
     transitions : transition list;
 }
-    
-(*types move 
+
+type move =
 {
     nom : string;
     perso : string;
@@ -22,7 +26,8 @@ type grammaire =
 {
     moves : move list;
 }
-ce serait bien qu'etat finaux deviennent (etat * move list) [etat de fin, move X] on verra + tard
+
+(*ce serait bien qu'etat finaux deviennent (etat * move list) [etat de fin, move X] on verra + tard
 
 et peut etre rajouter dans l'automate un truc pour print debug pour le bonus ? 
 *)
