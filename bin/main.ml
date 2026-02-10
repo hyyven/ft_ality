@@ -24,7 +24,7 @@ let test_automate () : Types.automate =
 {
     etats = [0; 1; 2];
     lexique = [];
-    etat_initial = 0; 
+    etat_initial = 0;
     etats_finaux = [2];
     transitions = 
     [
@@ -34,9 +34,14 @@ let test_automate () : Types.automate =
 }
 
 let main () : unit =
+    if Array.length Sys.argv != 2 then
+    (
+        Printf.printf "usage: ./ft_ality path/to/grammar/file\n";
+        exit 1;
+    );
     let mon_automate = test_automate () in
     print_automate mon_automate;
-    let mon_automate = Read_file.gnl_grammar mon_automate in
+    let mon_automate = Read_file.gnl_grammar mon_automate Sys.argv.(1) in
     print_automate mon_automate
 
 let () = main ()

@@ -10,7 +10,7 @@ $(NAME): $(SRCS)
 	@cp _build/install/default/bin/ft_ality $(NAME)
 
 run: $(NAME)
-	dune exec $(NAME)
+	dune exec $(NAME) grammar/grammar.gmr
 
 clean:
 	$(DUNE) clean

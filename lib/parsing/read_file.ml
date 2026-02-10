@@ -37,9 +37,9 @@ let parse_line (current_mode: mode) (line: string) (automate: Types.automate) : 
         | NoMode -> (current_mode, automate)
     )
 
-let gnl_grammar (automate: Types.automate) : Types.automate =
+let gnl_grammar (automate: Types.automate) (gmr_file_path: string) : Types.automate =
     try
-        In_channel.with_open_text "grammar/grammar.gmr" (fun chan ->
+        In_channel.with_open_text gmr_file_path (fun chan ->
             let rec loop mode automate =
                 match In_channel.input_line chan with
                 | Some line ->
