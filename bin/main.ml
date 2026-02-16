@@ -18,6 +18,14 @@ let print_automate(automate: Types.automate) : unit =
     List.iter (fun (src, symbole, dest) ->
         Printf.printf "  (%d, %s) -> %d\n" src symbole dest) automate.transitions;
     
+    Printf.printf "moves :\n";
+    List.iter
+    (
+        fun (move: Types.move) ->
+        let seq_str = String.concat " " move.sequence in
+        Printf.printf "  character: %s, move: %s, sequence: %s\n" move.perso move.nom seq_str
+    ) automate.grammar.moves;
+
     Printf.printf "\n"
 
 let test_automate () : Types.automate =
@@ -31,6 +39,7 @@ let test_automate () : Types.automate =
         (0, "[BP]", 1);
         (1, "[FP]", 2);
     ];
+    grammar = { moves = [] };
 }
 
 let main () : unit =

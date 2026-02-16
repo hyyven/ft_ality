@@ -1,7 +1,7 @@
 type mode =
     | NoMode
     | Keys
-    | Moves
+    | Section of string
 
 val gnl_grammar : Types.automate -> string -> Types.automate
 
