@@ -4,6 +4,7 @@ type mode =
     | Section of string
 
 let parse_moves_sequence (value: string) (automate: Types.automate) : string list =
+    (* Printf.printf "parsing move: %s" value; *)
     value
     |> String.map (fun c -> if c = '\t' || c = '\r' then ' ' else c)    (* remplace \t et \r par espaces *)
     |> String.split_on_char ' '                                         (* split sur espace *)
@@ -24,8 +25,11 @@ let parse_keys (line: string) (automate: Types.automate) : Types.automate =
     | key_part :: value_parts ->
         let key = String.trim key_part in
         let value = String.trim (String.concat "=" value_parts) in
-        if key = "" || value = ""
-            then automate
+        if key = "" || value = "" then
+        (
+            Printf.printf "ignoring malformated line (empty key or value): %s\n" line;
+            automate
+        )
         else
             (* let () = Printf.printf "key_dict: %s -> %s\n" key value in *)
             Modif_automate.add_lexique automate key value
@@ -41,34 +45,39 @@ let parse_moves (line: string) (current_mode: mode) (automate: Types.automate) =
         | key_part :: value_parts ->
             let key = String.trim key_part in
             let value = String.trim (String.concat "=" value_parts) in
-            if key = "" || value = ""
-                then automate
+            if key = "" || value = "" then
+                automate
             else
                 let sequence = parse_moves_sequence value automate in
+                (* Printf.printf " -> %s\n" key; *)
                 let new_move = {
                     Types.nom = key;
                     Types.perso = name;
                     Types.sequence = sequence;
-                } in
+                    } in
                 Modif_automate.add_move automate new_move
 
 let parse_line (current_mode: mode) (line: string) (automate: Types.automate) : mode * Types.automate =
     let trimmed = String.trim line in
     let len = String.length trimmed in
     let is_section = len >= 2 && trimmed.[0] = '[' && trimmed.[len - 1] = ']' in
-    if trimmed = ""
-        then (current_mode, automate)
-    else if trimmed = "[keys]"
-        then (Keys, automate)
-    else if is_section
-        then (Section (String.sub trimmed 1 (len - 2)), automate)
+    (* Printf.printf "trimmed: %s\n" trimmed; *)
+    if trimmed = "" then
+        (current_mode, automate)
+    else if is_section then
+        if trimmed = "[keys]" then
+            match current_mode with
+            | NoMode -> (Keys, automate)
+            | _ -> Printf.printf "error: [keys] section must be at the beginning\n"; exit 1
+        else
+            match current_mode with
+            | NoMode -> Printf.printf "error: first section must be [keys]\n"; exit 1
+            | _ -> (Section (String.sub trimmed 1 (len - 2)), automate)
     else
-    (
         match current_mode with
         | Keys -> (current_mode, parse_keys trimmed automate)
         | Section _ -> (current_mode, parse_moves trimmed current_mode automate)
         | NoMode -> (current_mode, automate)
-    )
 
 let gnl_grammar (automate: Types.automate) (gmr_file_path: string) : Types.automate =
     try

@@ -1,0 +1,9 @@
+[keys]
+k = Block
+v = Up
+
+[moves]
+k = v
+
+[keys]
+down = Down

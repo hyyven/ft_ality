@@ -1,0 +1,8 @@
+[keys]
+a = A
+b = B
+= = C
+
+[asd]
+asd = a b
+qwe = a b

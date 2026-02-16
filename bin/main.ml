@@ -49,7 +49,7 @@ let main () : unit =
         exit 1;
     );
     let mon_automate = test_automate () in
-    print_automate mon_automate;
+    (* print_automate mon_automate; *)
     let mon_automate = Read_file.gnl_grammar mon_automate Sys.argv.(1) in
     print_automate mon_automate
 
