@@ -1,7 +1,7 @@
 module Types = Ft_ality.Types
 module Read_file = Ft_ality.Read_file
 
-let print_automate(automate: Types.automate) : unit =
+let print_automate(automate: Types.automate) (grammar: Types.grammaire) : unit =
     Printf.printf "\n === AUTOMATE === \n";
     Printf.printf "etats : %d etats au total\n" (List.length automate.etats);
     let entrees =
@@ -24,23 +24,24 @@ let print_automate(automate: Types.automate) : unit =
         fun (move: Types.move) ->
         let seq_str = String.concat " " move.sequence in
         Printf.printf "  character: %s, move: %s, sequence: %s\n" move.perso move.nom seq_str
-    ) automate.grammar.moves;
+    ) grammar.moves;
 
     Printf.printf "\n"
 
-let test_automate () : Types.automate =
-{
-    etats = [0; 1; 2];
-    lexique = [];
-    etat_initial = 0;
-    etats_finaux = [2];
-    transitions = 
-    [
-        (0, "[BP]", 1);
-        (1, "[FP]", 2);
-    ];
-    grammar = { moves = [] };
-}
+let test_automate () : Types.automate * Types.grammaire =
+    let grammar = { Types.moves = [] } in 
+    let automate = {
+        Types.etats = [0; 1; 2];
+        Types.lexique = [];
+        Types.etat_initial = 0;
+        Types.etats_finaux = [2];
+        Types.transitions = 
+        [
+            (0, "[BP]", 1);
+            (1, "[FP]", 2);
+        ];
+    } in
+    (automate, grammar)
 
 let main () : unit =
     if Array.length Sys.argv != 2 then
@@ -48,9 +49,8 @@ let main () : unit =
         Printf.printf "usage: ./ft_ality path/to/grammar/file\n";
         exit 1;
     );
-    let mon_automate = test_automate () in
-    (* print_automate mon_automate; *)
-    let mon_automate = Read_file.gnl_grammar mon_automate Sys.argv.(1) in
-    print_automate mon_automate
+    let (mon_automate, ma_grammaire) = test_automate () in
+    let (mon_automate, ma_grammaire) = Read_file.gnl_grammar mon_automate ma_grammaire Sys.argv.(1) in
+    print_automate mon_automate ma_grammaire
 
 let () = main ()

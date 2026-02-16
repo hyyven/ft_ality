@@ -3,6 +3,9 @@ a = A
 b = B
 = = C
 
+[keys]
+c = C
+
 [asd]
 asd = a b
 qwe = a b

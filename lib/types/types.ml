@@ -25,7 +25,6 @@ type automate =
     etat_initial : etat;
     etats_finaux : etat list;
     transitions : transition list;
-    grammar : grammaire;
 }
 
 (*ce serait bien qu'etat finaux deviennent (etat * move list) [etat de fin, move X] on verra + tard

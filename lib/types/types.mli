@@ -25,5 +25,4 @@ type automate =
     etat_initial : etat;
     etats_finaux : etat list;
     transitions : transition list;
-    grammar : grammaire;
 }
