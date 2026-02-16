@@ -3,10 +3,24 @@ type mode =
     | Keys
     | Section of string
 
+let parse_moves_sequence (value: string) (automate: Types.automate) : string list =
+    value
+    |> String.map (fun c -> if c = '\t' || c = '\r' then ' ' else c)    (* remplace \t et \r par espaces *)
+    |> String.split_on_char ' '                                         (* split sur espace *)
+    |> List.filter (fun s -> s <> "")                                   (* filtre les elements de la liste qui sont vides*)
+    |> List.map (fun token ->                                           (* map chaque token vers sa valeur dans le lexique, print une erreur si l'input existe pas *)
+        match List.assoc_opt token automate.lexique with
+        | Some v -> v
+        | None ->
+            Printf.printf "error: token '%s' not found in [keys] section\n" token;
+            exit 1
+    )
+
 let parse_keys (line: string) (automate: Types.automate) : Types.automate =
     let parts = String.split_on_char '=' line in
     match parts with
-    | [] | [_] -> automate
+    | [] -> Printf.printf "ignoring malformated line: %s\n" line; automate
+    | [_] -> Printf.printf "ignoring malformated line: %s\n" line; automate
     | key_part :: value_parts ->
         let key = String.trim key_part in
         let value = String.trim (String.concat "=" value_parts) in
@@ -22,26 +36,15 @@ let parse_moves (line: string) (current_mode: mode) (automate: Types.automate) =
     | Section name ->
         let parts = String.split_on_char '=' line in
         match parts with
-        | [] | [_] -> automate
+        | [] -> Printf.printf "ignoring malformated line: %s\n" line; automate
+        | [_] -> Printf.printf "ignoring malformated line: %s\n" line; automate
         | key_part :: value_parts ->
             let key = String.trim key_part in
             let value = String.trim (String.concat "=" value_parts) in
             if key = "" || value = ""
                 then automate
             else
-                (* 'filter' parcourt la liste return par le split et check si chaque element n'est pas egal a "" *)
-                (* 'map' remplace chaque token par sa valeur correspondante dans le lexique *)
-                let sequence =
-                    String.split_on_char ' ' value
-                    |> List.filter (fun s -> s <> "")
-                    |> List.map (fun token ->
-                        match List.assoc_opt token automate.lexique with
-                        | Some v -> v
-                        | None ->
-                            Printf.printf "error: token '%s' not found in [keys] section\n" token;
-                            exit 1
-                    )
-                in
+                let sequence = parse_moves_sequence value automate in
                 let new_move = {
                     Types.nom = key;
                     Types.perso = name;

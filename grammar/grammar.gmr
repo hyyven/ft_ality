@@ -12,6 +12,7 @@ s = [BK]
 d = [BP]
 z = [FK]
 x = [FP]
+f asd
 
 [Freddy Kruger]
 Claw Slam = d
@@ -25,7 +26,12 @@ Mamamia Adouken = down z d e
  
 
 [Sonya]
+ 
 Knockdown = d
-High Kick = up z
+High Kick         =            	  up   z                                a				w a
 Bomboclat Backflip = up left down w
+test a a  a a a a
+asd
+asd
 
+qwe
