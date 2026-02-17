@@ -59,7 +59,7 @@ let main () : unit =
     let (grammar_file, debug_mode) = parse_args () in
     if debug_mode then
     (
-        Printf.printf "Debug mode enabled\n";
+        Printf.printf "debug mode enabled\n";
         Debug.set_debug_mode true
     );
     let (mon_automate, ma_grammaire) = test_automate () in

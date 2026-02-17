@@ -6,11 +6,10 @@ type mode =
 let parse_moves_sequence (value: string) (automate: Types.automate) : string list =
     (* Debug.ft_debug ("parsing move: " ^ value ^ "\n"); *)
     Utils.ft_trim_split value ' '
-    |> List.map (fun token ->                                           (* map chaque token vers sa valeur dans le lexique, print une erreur si l'input existe pas *)
+    |> List.map (fun token ->   (* map chaque token vers sa valeur dans le lexique, return une erreur si l'input existe pas *)
         match List.assoc_opt token automate.lexique with
         | Some v -> v
-        | None ->
-            Debug.ft_error ("token '" ^ token ^ "' not found in [keys] section");
+        | None -> Debug.ft_error ("token '" ^ token ^ "' not found in [keys] section");
     )
 
 let parse_keys (line: string) (automate: Types.automate) : Types.automate =
@@ -42,15 +41,17 @@ let parse_moves (line: string) (current_mode: mode) (automate: Types.automate) (
                 grammar
             )
             else
+            (
                 let sequence = parse_moves_sequence value automate in
                 (* Debug.ft_debug (" -> " ^ key ^ "\n"); *)
-                let _ = Utils.ft_check_move_duplicate key sequence name grammar in
+                Utils.ft_check_move_duplicate key sequence name grammar;
                 let new_move = {
                     Types.nom = key;
                     Types.perso = name;
                     Types.sequence = sequence;
                 } in
                 Modif_automate.add_move grammar new_move
+            )
 
 let parse_line (current_mode: mode) (line: string) (automate: Types.automate) (grammar: Types.grammaire) : mode * Types.automate * Types.grammaire =
     let trimmed = String.trim line in
@@ -88,4 +89,4 @@ let gnl_grammar (automate: Types.automate) (grammar: Types.grammaire) (gmr_file_
             loop NoMode automate grammar
         )
     with Sys_error msg->
-        Debug.ft_error ("Error opening file: " ^ msg)
+        Debug.ft_error ("opening file: " ^ msg)
