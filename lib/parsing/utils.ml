@@ -7,25 +7,21 @@ let ft_trim_split (s: string) (c: char) : string list =
 let ft_check_keys_duplicate (key: string) (value: string) (automate: Types.automate) : unit =
     if List.mem_assoc key automate.lexique then
     (
-        Printf.printf "error: duplicate key '%s' in [keys] section\n" key;
-        exit 1
+        Debug.ft_error ("duplicate key '" ^ key ^ "' in [keys] section");
     )
     else if List.exists (fun (_, v) -> v = value) automate.lexique then
     (
-        Printf.printf "error: duplicate value '%s' in [keys] section\n" value;
-        exit 1
+        Debug.ft_error ("duplicate value '" ^ value ^ "' in [keys] section");
     )
 
 let ft_check_move_duplicate (name: string) (sequence: string list) (perso: string) (grammar: Types.grammaire) : unit =
     if List.exists (fun (m: Types.move) -> m.perso = perso && m.nom = name) grammar.moves then
     (
-        Printf.printf "error: duplicate move name '%s' for character '%s'\n" name perso;
-        exit 1
+        Debug.ft_error ("duplicate move name '" ^ name ^ "' for character '" ^ perso ^ "'");
     )
     else if List.exists (fun (m: Types.move) -> m.perso = perso && m.sequence = sequence) grammar.moves then
     (
-        Printf.printf "error: duplicate move sequence '%s' for character '%s'\n" name perso;
-        exit 1
+        Debug.ft_error ("duplicate move sequence '" ^ name ^ "' for character '" ^ perso ^ "'");
     )
 
 let split_on_first_char (s: string) : (string * string) option =

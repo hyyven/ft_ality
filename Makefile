@@ -19,3 +19,6 @@ fclean: clean
 	@rm -rf $(NAME)
 
 re: fclean all
+
+# dune exec ft_ality -- <path/to/grammar> --debug
+# ./ft_ality grammar/grammar.gmr --debug
