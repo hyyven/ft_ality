@@ -4,7 +4,7 @@ let ft_trim_split (s: string) (c: char) : string list =
     |> String.split_on_char c                                             (* split sur 'c' *)
     |> List.filter (fun s -> s <> "")                                     (* filtre les elements de la liste qui sont vides*)
 
-let ft_check_duplicate (key: string) (value: string) (automate: Types.automate) : unit =
+let ft_check_keys_duplicate (key: string) (value: string) (automate: Types.automate) : unit =
     if List.mem_assoc key automate.lexique then
     (
         Printf.printf "error: duplicate key '%s' in [keys] section\n" key;
@@ -13,6 +13,18 @@ let ft_check_duplicate (key: string) (value: string) (automate: Types.automate) 
     else if List.exists (fun (_, v) -> v = value) automate.lexique then
     (
         Printf.printf "error: duplicate value '%s' in [keys] section\n" value;
+        exit 1
+    )
+
+let ft_check_move_duplicate (name: string) (sequence: string list) (perso: string) (grammar: Types.grammaire) : unit =
+    if List.exists (fun (m: Types.move) -> m.perso = perso && m.nom = name) grammar.moves then
+    (
+        Printf.printf "error: duplicate move name '%s' for character '%s'\n" name perso;
+        exit 1
+    )
+    else if List.exists (fun (m: Types.move) -> m.perso = perso && m.sequence = sequence) grammar.moves then
+    (
+        Printf.printf "error: duplicate move sequence '%s' for character '%s'\n" name perso;
         exit 1
     )
 

@@ -4,5 +4,8 @@ B  	 = Aa =
 C = =
 a= = =
 [samo]
-test = A B C
-test2 = a
+test = A B C a a a a
+asd = A B C a a a a
+
+[sami]
+test= B

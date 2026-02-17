@@ -26,7 +26,7 @@ let parse_keys (line: string) (automate: Types.automate) : Types.automate =
         )
         else
             (* let () = Printf.printf "key_dict: %s -> %s\n" key value in *)
-            let _ = Utils.ft_check_duplicate key value automate in
+            let _ = Utils.ft_check_keys_duplicate key value automate in
             Modif_automate.add_lexique automate key value
 
 let parse_moves (line: string) (current_mode: mode) (automate: Types.automate) (grammar: Types.grammaire) =
@@ -44,6 +44,7 @@ let parse_moves (line: string) (current_mode: mode) (automate: Types.automate) (
             else
                 let sequence = parse_moves_sequence value automate in
                 (* Printf.printf " -> %s\n" key; *)
+                let _ = Utils.ft_check_move_duplicate key sequence name grammar in
                 let new_move = {
                     Types.nom = key;
                     Types.perso = name;
