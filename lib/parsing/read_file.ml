@@ -5,10 +5,7 @@ type mode =
 
 let parse_moves_sequence (value: string) (automate: Types.automate) : string list =
     (* Printf.printf "parsing move: %s" value; *)
-    value
-    |> String.map (fun c -> if c = '\t' || c = '\r' then ' ' else c)    (* remplace \t et \r par espaces *)
-    |> String.split_on_char ' '                                         (* split sur espace *)
-    |> List.filter (fun s -> s <> "")                                   (* filtre les elements de la liste qui sont vides*)
+    Utils.ft_trim_split value ' '
     |> List.map (fun token ->                                           (* map chaque token vers sa valeur dans le lexique, print une erreur si l'input existe pas *)
         match List.assoc_opt token automate.lexique with
         | Some v -> v
@@ -18,13 +15,10 @@ let parse_moves_sequence (value: string) (automate: Types.automate) : string lis
     )
 
 let parse_keys (line: string) (automate: Types.automate) : Types.automate =
-    let parts = String.split_on_char '=' line in
-    match parts with
-    | [] -> Printf.printf "ignoring malformated line: %s\n" line; automate
-    | [_] -> Printf.printf "ignoring malformated line: %s\n" line; automate
-    | key_part :: value_parts ->
-        let key = String.trim key_part in
-        let value = String.trim (String.concat "=" value_parts) in
+    match Utils.split_on_first_char line with
+    | None -> Printf.printf "ignoring malformated line: %s\n" line; automate
+    | Some (key, value) ->
+        (* Printf.printf "value: %s\n" value; *)
         if key = "" || value = "" then
         (
             Printf.printf "ignoring malformated line (empty key or value): %s\n" line;
@@ -32,21 +26,21 @@ let parse_keys (line: string) (automate: Types.automate) : Types.automate =
         )
         else
             (* let () = Printf.printf "key_dict: %s -> %s\n" key value in *)
+            let _ = Utils.ft_check_duplicate key value automate in
             Modif_automate.add_lexique automate key value
 
 let parse_moves (line: string) (current_mode: mode) (automate: Types.automate) (grammar: Types.grammaire) =
     match current_mode with
     | NoMode | Keys -> grammar
     | Section name ->
-        let parts = String.split_on_char '=' line in
-        match parts with
-        | [] -> Printf.printf "ignoring malformated line: %s\n" line; grammar
-        | [_] -> Printf.printf "ignoring malformated line: %s\n" line; grammar
-        | key_part :: value_parts ->
-            let key = String.trim key_part in
-            let value = String.trim (String.concat "=" value_parts) in
+        match Utils.split_on_first_char line with
+        | None -> Printf.printf "ignoring malformated line: %s\n" line; grammar
+        | Some (key, value) ->
             if key = "" || value = "" then
+            (
+                Printf.printf "ignoring malformated line: %s\n" line;
                 grammar
+            )
             else
                 let sequence = parse_moves_sequence value automate in
                 (* Printf.printf " -> %s\n" key; *)
@@ -54,7 +48,7 @@ let parse_moves (line: string) (current_mode: mode) (automate: Types.automate) (
                     Types.nom = key;
                     Types.perso = name;
                     Types.sequence = sequence;
-                    } in
+                } in
                 Modif_automate.add_move grammar new_move
 
 let parse_line (current_mode: mode) (line: string) (automate: Types.automate) (grammar: Types.grammaire) : mode * Types.automate * Types.grammaire =
@@ -94,4 +88,4 @@ let gnl_grammar (automate: Types.automate) (grammar: Types.grammaire) (gmr_file_
         )
     with Sys_error msg->
         Printf.printf "Error opening file: %s\n" msg;
-        (automate, grammar)
+        exit 1
