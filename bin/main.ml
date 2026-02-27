@@ -1,6 +1,7 @@
 module Types = Ft_ality.Types
 module Read_file = Ft_ality.Read_file
 module Debug = Ft_ality.Debug
+module Automate = Ft_ality.Automate  (* ← AJOUT: Import du module Automate *)
 
 let print_automate(automate: Types.automate) (grammar: Types.grammaire) : unit =
     Debug.ft_debug ("=== AUTOMATE === \n");
@@ -12,9 +13,9 @@ let print_automate(automate: Types.automate) (grammar: Types.grammaire) : unit =
     in
     Debug.ft_debug ("inputs : " ^ entrees ^ "\n");
     Debug.ft_debug ("etat de depart : " ^ string_of_int automate.etat_initial ^ "\n");
-    let etats_fin = String.concat ", " 
+    (* let etats_fin = String.concat ", " 
     (List.map string_of_int automate.etats_finaux) in
-    Debug.ft_debug ("etats 2 fin : " ^ etats_fin ^ "\n");
+    Debug.ft_debug ("etats 2 fin : " ^ etats_fin ^ "\n"); *)
     Debug.ft_debug ("Transitions :\n");
     List.iter (fun (src, symbole, dest) ->
         Debug.ft_debug ("  (" ^ string_of_int src ^ ", " ^ symbole ^ ") -> " ^ string_of_int dest ^ "\n")
@@ -33,15 +34,11 @@ let print_automate(automate: Types.automate) (grammar: Types.grammaire) : unit =
 let test_automate () : Types.automate * Types.grammaire =
     let grammar = { Types.moves = [] } in 
     let automate = {
-        Types.etats = [0; 1; 2];
+        Types.etats = [];
         Types.lexique = [];
         Types.etat_initial = 0;
-        Types.etats_finaux = [2];
-        Types.transitions = 
-        [
-            (0, "[BP]", 1);
-            (1, "[FP]", 2);
-        ];
+        Types.etats_finaux = [];
+        Types.transitions = [];
     } in
     (automate, grammar)
 
@@ -64,6 +61,11 @@ let main () : unit =
     );
     let (mon_automate, ma_grammaire) = test_automate () in
     let (mon_automate, ma_grammaire) = Read_file.gnl_grammar mon_automate ma_grammaire grammar_file in
-    print_automate mon_automate ma_grammaire
+    (* Construire l'automate avec les moves parsés *)
+    let mon_automate = Automate.construction_automate ma_grammaire mon_automate in
+    
+    (* print_automate mon_automate ma_grammaire *)
+
+    Automate.print_automate mon_automate ma_grammaire
 
 let () = main ()

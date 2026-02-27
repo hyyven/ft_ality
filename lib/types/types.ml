@@ -23,7 +23,7 @@ type automate =
     etats : etat list;
     lexique : key_dict list ;
     etat_initial : etat;
-    etats_finaux : etat list;
+    etats_finaux : (etat * move list) list;
     transitions : transition list;
 }
 
