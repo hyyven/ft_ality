@@ -7,3 +7,6 @@
 
 ## debug
 - [ ] faire un truc pour les logs debug pour le bonus
+
+## main loop
+- [ ] rajouter jolis prints pour la loop main

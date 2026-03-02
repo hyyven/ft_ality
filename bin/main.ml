@@ -1,7 +1,8 @@
 module Types = Ft_ality.Types
 module Read_file = Ft_ality.Read_file
 module Debug = Ft_ality.Debug
-module Automate = Ft_ality.Automate  (* ← AJOUT: Import du module Automate *)
+module Automate = Ft_ality.Automate
+module Main_loop = Ft_ality.Main_loop
 
 let print_automate(automate: Types.automate) (grammar: Types.grammaire) : unit =
     Debug.ft_debug ("=== AUTOMATE === \n");
@@ -63,9 +64,7 @@ let main () : unit =
     let (mon_automate, ma_grammaire) = Read_file.gnl_grammar mon_automate ma_grammaire grammar_file in
     (* Construire l'automate avec les moves parsés *)
     let mon_automate = Automate.construction_automate ma_grammaire mon_automate in
-    
-    (* print_automate mon_automate ma_grammaire *)
-
-    Automate.print_automate mon_automate ma_grammaire
+    Automate.print_automate mon_automate ma_grammaire;
+    Main_loop.run mon_automate
 
 let () = main ()
