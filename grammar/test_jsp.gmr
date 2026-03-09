@@ -1,11 +1,12 @@
 [keys]
-A = B B B B
-B  	 = Aa =
-C = =
-a= = =
+
+q = [BP]
+w = Up
+e = Down
+
 [samo]
-test = A B C a a a a
-asd = A B C a a a a
+1st move = [BP] Up
+2nd move = Down Up
 
 [sami]
-test= B
+coucou move = Up Up

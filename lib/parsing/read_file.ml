@@ -5,11 +5,11 @@ type mode =
 
 let parse_moves_sequence (value: string) (automate: Types.automate) : string list =
     (* Debug.ft_debug ("parsing move: " ^ value ^ "\n"); *)
-    Utils.ft_trim_split value ' '
-    |> List.map (fun token ->   (* map chaque token vers sa valeur dans le lexique, return une erreur si l'input existe pas *)
-        match List.assoc_opt token automate.lexique with
-        | Some v -> v
-        | None -> Debug.ft_error ("token '" ^ token ^ "' not found in [keys] section");
+    Utils.ft_trim_split value '|'
+    |> List.map (fun input ->   (* check si la valeur existe, return une erreur sinon *)
+        match List.exists (fun (_, v) -> v = input) automate.lexique with
+        | true -> input
+        | false -> Debug.ft_error ("input '" ^ input ^ "' not found in [keys] section");
     )
 
 let parse_keys (line: string) (automate: Types.automate) : Types.automate =

@@ -1,6 +1,5 @@
 [keys]
-
-      	     up             =              Up                 
+up = Up
 down = Down
 left = Left
 right = Right
@@ -8,36 +7,21 @@ q = Block
 w = Flip Stance
 e = Tag
 a = Throw
- 
 s = [BK]
 d = [BP]
 z = [FK]
 x = [FP]
-f asd
 
-[]
-asd
 [Freddy Kruger]
-{}
-Claw Slam = d
-Low Kick = down z
-Mamamia Adouken = down z d e
+Claw Slam = [BP]
+Low Kick = Down|[FK]
+Mamamia Adouken = Down|[FK]|[BP]|Tag
 
-					            
-
- 
 [bbb]
-ueeee = d d d
- 
+ueeee = [BP]|[BP]|[BP]
 
 [Sonya]
- 
-Knockdown = d
-Test etatfinaux = d d
-High Kick         =            	  up   z                                a				w a
-Bomboclat Backflip = up left down w
-test a a  a a a a
-asd
-asd
-
-qwe
+Knockdown = [BP]
+Test etatfinaux = [BP]|[BP]
+High Kick = Up|[FK]|Throw|Flip Stance|Throw
+Bomboclat Backflip = Up|Left|Down|Flip Stance
