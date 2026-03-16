@@ -17,8 +17,11 @@ Claw Slam = [BP]
 Low Kick = Down|[FK]
 Mamamia Adouken = Down|[FK]|[BP]|Tag
 
+
 [bbb]
 ueeee = [BP]|[BP]|[BP]
+Fromage = Down|[FK]|[BP]|Tag
+Test = [BP]|[BP]|[BP]|[BK]|[BP]
 
 [Sonya]
 Knockdown = [BP]
